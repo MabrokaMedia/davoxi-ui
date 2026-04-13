@@ -9,6 +9,7 @@ export { EmptyState } from './components/EmptyState.js';
 export { PageHeader } from './components/PageHeader.js';
 export { ConfirmDialog } from './components/ConfirmDialog.js';
 export { StatusChip } from './components/StatusChip.js';
+export { AgentStatusChip } from './components/AgentStatusChip.js';
 export { StatCard } from './components/StatCard.js';
 
 // Skeletons
