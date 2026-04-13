@@ -3,40 +3,12 @@ import { Chip, alpha, Box } from '@mui/material';
 
 type AgentStatus = 'draft' | 'published' | 'paused';
 
-const STATUS_CONFIG: Record<AgentStatus, { label: string; color: string; bg: string; border: string }> = {
-  draft: {
-    label: 'Draft',
-    color: '#6b7280',
-    bg: alpha('#6b7280', 0.06),
-    border: alpha('#6b7280', 0.1),
-  },
-  published: {
-    label: 'Published',
-    color: '#047857',
-    bg: alpha('#059669', 0.08),
-    border: alpha('#059669', 0.15),
-  },
-  paused: {
-    label: 'Paused',
-    color: '#b45309',
-    bg: alpha('#d97706', 0.08),
-    border: alpha('#d97706', 0.15),
-  },
-};
-
-const DOT_COLORS: Record<AgentStatus, string> = {
-  draft: '#9ca3af',
-  published: '#059669',
-  paused: '#d97706',
-};
-
 interface Props {
   status: AgentStatus;
 }
 
 export const AgentStatusChip = memo(function AgentStatusChip({ status }: Props) {
-  const config = STATUS_CONFIG[status] || STATUS_CONFIG.draft;
-  const dotColor = DOT_COLORS[status] || DOT_COLORS.draft;
+  const isLive = status === 'published';
 
   return (
     <Chip
@@ -48,20 +20,25 @@ export const AgentStatusChip = memo(function AgentStatusChip({ status }: Props) 
               width: 6,
               height: 6,
               borderRadius: '50%',
-              bgcolor: dotColor,
-              boxShadow: status === 'published' ? `0 0 0 2px ${alpha(dotColor, 0.2)}` : 'none',
+              bgcolor: isLive ? '#059669' : '#9ca3af',
+              boxShadow: isLive ? `0 0 0 2px ${alpha('#059669', 0.2)}` : 'none',
+              animation: isLive ? 'pulse 2s ease-in-out infinite' : 'none',
+              '@keyframes pulse': {
+                '0%, 100%': { boxShadow: `0 0 0 2px ${alpha('#059669', 0.2)}` },
+                '50%': { boxShadow: `0 0 0 4px ${alpha('#059669', 0.1)}` },
+              },
             }}
           />
-          {config.label}
+          {isLive ? 'Live' : 'Off'}
         </Box>
       }
       sx={{
-        bgcolor: config.bg,
-        color: config.color,
-        fontWeight: 550,
-        fontSize: '0.6875rem',
+        bgcolor: isLive ? alpha('#059669', 0.08) : alpha('#6b7280', 0.06),
+        color: isLive ? '#047857' : '#6b7280',
+        fontWeight: 600,
+        fontSize: '0.75rem',
         height: 26,
-        border: `1px solid ${config.border}`,
+        border: `1px solid ${isLive ? alpha('#059669', 0.15) : alpha('#6b7280', 0.1)}`,
         '& .MuiChip-label': { px: 1 },
       }}
     />
